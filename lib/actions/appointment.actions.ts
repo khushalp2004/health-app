@@ -95,7 +95,11 @@ export const updateAppointment=async({appointmentId,userId,appointment,type}:Upd
       throw new Error("Appointment not found");
     }
 
-    //sms notification
+    const smsMessage=`
+    Hi, it's Medislot. 
+    ${type==='schedule' ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${appointment.primaryPhysician}`:`We regret to inform you that your appointment has been cancelled for the following reason:  ${appointment.cancellationReason}`}`;
+
+    await sendSMSNotification(userId,smsMessage);
 
     revalidatePath("/admin");
     return parseStringify(updatedAppointment);
@@ -103,3 +107,19 @@ export const updateAppointment=async({appointmentId,userId,appointment,type}:Upd
     console.error(err);
   }
 }
+
+
+export const sendSMSNotification=async(userId: string, content: string)=>{
+  try{
+    const message=await messaging.createSms(
+      ID.unique(),
+      content,
+      [],
+      [userId],
+    )
+
+    return parseStringify(message);
+  }catch(err){
+    console.error(err);
+  }
+  }
