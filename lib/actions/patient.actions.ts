@@ -41,6 +41,17 @@ export const getUser=async(userId: string)=>{
 
 export const registerPatient=async({identificationDocument,...patient}:RegisterUserParams)=>{
     try{
+        // Check if patient already exists for the user
+        const existingPatients = await databases.listDocuments(
+            DATABASE_ID!,
+            PATIENT_COLLECTION_ID!,
+            [Query.equal("userId", [patient.userId])]
+        );
+
+        if(existingPatients.documents.length > 0){
+            return parseStringify(existingPatients.documents[0]);
+        }
+
         let file;
 
         if(identificationDocument){

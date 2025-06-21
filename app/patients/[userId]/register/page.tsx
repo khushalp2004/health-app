@@ -3,7 +3,8 @@ import { getUser } from "@/lib/actions/patient.actions";
 import Image from "next/image";
 import Link from "next/link";
 
-const Register = async ({ params: { userId } }: SearchParamProps) => {
+const Register = async (props: SearchParamProps) => {
+    const { userId } = await props.params;
     const user = await getUser(userId);
     return (
         <div className="flex h-screen bg-gray-950 text-gray-100">
