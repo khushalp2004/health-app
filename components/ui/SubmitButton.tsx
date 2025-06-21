@@ -10,10 +10,6 @@ interface ButtonProps{
 }
 
 const SubmitButton = ({isLoading,children}:ButtonProps) => {
-  const variants = {
-  default: "bg-blue-600 hover:bg-blue-700",
-  destructive: "bg-red-600 hover:bg-red-700",
-}
   return (
     <Button
           type="submit"

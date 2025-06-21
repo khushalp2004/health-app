@@ -18,13 +18,13 @@ export const createUser=async(user: CreateUserParams)=>{
         return newUser;
     }catch(err:any){
         if(err && err?.code===409){
-            const documents=await users.list([
+            const existingUser=await users.list([
                 Query.equal('email',[user.email])
             ])
 
-            return documents?.users[0];
+            return existingUser?.users[0];
         }
-        console.error("Error creating user:", err);
+        console.error("An error occurred while creating a new user:", err);
         throw err;
     }
 }

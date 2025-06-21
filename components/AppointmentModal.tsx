@@ -39,7 +39,7 @@ export const AppointmentModal = ({
           size="sm"
           className={`h-8 rounded-md px-3 text-xs font-medium capitalize transition-colors ${
             type === "schedule"
-              ? "bg-green-700/50 text-white hover:bg-green-700/40 hover:text-white rounded cursor-pointer"
+              ? "bg-blue-700/50 text-white hover:bg-blue-700/40 hover:text-white rounded cursor-pointer"
               : "rounded bg-red-700/50 text-gray-300 hover:bg-red-700/40 hover:text-white cursor-pointer"
           }`}
         >
