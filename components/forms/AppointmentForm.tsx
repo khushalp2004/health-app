@@ -243,38 +243,14 @@ const AppointmentForm = ({
           </>
         )}
 
-
-        {type==='cancel' ? <Button
-                  type="submit"
-                  className={cn("hover:bg-red-700 text-white shadow-lg shadow-white-500/20 bg-red-700/80 hover:text-white hover:shadow-lg hover:shadow-red-500/20 text-sm px-4 py-2 rounded font-medium transition duration-150 ease-in-out w-full cursor-pointer",
-                    isLoading && 'bg-white text-white cursor-not-allowed',
-                  )}
-                  disabled={isLoading}
-        
-                >
-                    {isLoading ? (
-                        <div className='flex items-center gap-4'>
-                            <Image src="/loader.svg" alt="loader" width={24} height={24} className='animate-spin invert-100' />
-                            
-                        </div>
-                    ):buttonLabel}
-                </Button>: <></>}
-
-                {type==='schedule' ? <Button
-                  type="submit"
-                  className={cn("hover:bg-blue-700 text-white shadow-lg shadow-white-500/20 bg-blue-700/80 hover:text-white hover:shadow-lg hover:shadow-blue-500/20 text-sm px-4 py-2 rounded font-medium transition duration-150 ease-in-out w-full cursor-pointer",
-                    isLoading && 'bg-white text-white cursor-not-allowed',
-                  )}
-                  disabled={isLoading}
-        
-                >
-                    {isLoading ? (
-                        <div className='flex items-center gap-4'>
-                            <Image src="/loader.svg" alt="loader" width={24} height={24} className='animate-spin invert-100' />
-                            
-                        </div>
-                    ):buttonLabel}
-                </Button>: <></>}
+                <SubmitButton
+          isLoading={isLoading}
+          className={`${
+            type === "cancel" ? "bg-red-500" : "bg-blue-700/55"
+          } w-full`}
+        >
+          {buttonLabel}
+        </SubmitButton>
 
       </form>
     </Form>
