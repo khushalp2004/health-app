@@ -1,9 +1,10 @@
-// "use client";
-
 import { columns } from "@/components/emergencyTable/columns";
 import { DataTable } from "@/components/table/DataTable";
+import RealTimeNotificationBell from "@/components/ui/RealTimeNotificationBell";
+import RealTimeRegularAlert from "@/components/ui/RealTimeRegularAlert";
+import SocketDebugger from "@/components/ui/SocketDebugger";
+import TestNotificationButtons from "@/components/ui/TestNotificationButtons";
 import { getEmergencyRecentList, getNormalBellNotification } from "@/lib/actions/appointment.actions";
-import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -33,18 +34,11 @@ const EmergencyDash = async () => {
             Emergency Dashboard
           </div>
           
-          <Link 
-            href="/admin" 
-            className="relative p-2 rounded-full hover:bg-gray-800/50 transition-all group"
-            aria-label="Regular appointments notifications"
-          >
-            <Bell className="w-6 h-6 text-gray-300 group-hover:text-white" />
-            {normalCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white animate-pulse">
-                {normalCount > 9 ? '9+' : normalCount}
-              </span>
-            )}
-          </Link>
+          <RealTimeNotificationBell
+            type="regular"
+            initialCount={normalCount}
+            href="/admin"
+          />
         </div>
       </header>
 
@@ -60,26 +54,10 @@ const EmergencyDash = async () => {
               </p>
             </div>
 
-            <Link 
+            <RealTimeRegularAlert
+              initialCount={normalCount}
               href="/admin"
-              className={`flex items-center gap-3 p-3 rounded-lg transition-all ${normalCount > 0 
-                ? "bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 animate-pulse-once" 
-                : "bg-gray-800/50 hover:bg-gray-700/50 text-gray-300"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Bell className="w-5 h-5" />
-                <span className="font-semibold text-lg">
-                  {normalCount > 0 
-                    ? `${normalCount} Regular Notification${normalCount > 1 ? 's' : ''}` 
-                    : "No regular notifications"}
-                </span>
-              </div>
-              {normalCount > 0 && (
-                <span className="ml-2 px-2 py-1 rounded bg-blue-600/90 text-white text-sm">
-                  View Now
-                </span>
-              )}
-            </Link>
+            />
           </div>
         </section>
 
@@ -94,6 +72,10 @@ const EmergencyDash = async () => {
           />
         </section>
       </main>
+
+      {/* Test Notification Buttons - Remove in production */}
+      {/* <TestNotificationButtons /> */}
+      <SocketDebugger />
     </div>
   );
 };

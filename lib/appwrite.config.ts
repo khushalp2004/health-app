@@ -20,3 +20,6 @@ export const databases = new sdk.Databases(client);
 export const users = new sdk.Users(client);
 export const messaging = new sdk.Messaging(client);
 export const storage = new sdk.Storage(client);
+
+// Real-time subscriptions are not supported in the Appwrite Node.js SDK.
+// Remove or refactor this function if you need real-time features; use the Web SDK in a browser environment instead.

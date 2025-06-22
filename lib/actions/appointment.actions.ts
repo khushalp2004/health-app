@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { ID, Query } from "node-appwrite";
-
+// Make sure the file exists at the correct path, or update the import path if needed
 import { Appointment } from "@/types/appwrite.types";
 
 import {
@@ -13,6 +13,25 @@ import {
   messaging,
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
+
+// Helper function to trigger real-time notifications
+const triggerNotification = async (type: 'emergency' | 'appointment', data: any) => {
+  try {
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? process.env.NEXT_PUBLIC_APP_URL 
+      : 'http://localhost:3000';
+    
+    await fetch(`${baseUrl}/api/notifications/trigger`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ type, data }),
+    });
+  } catch (error) {
+    console.error('Failed to trigger notification:', error);
+  }
+};
 
 //  CREATE APPOINTMENT
 export const createAppointment = async (
@@ -25,6 +44,17 @@ export const createAppointment = async (
       ID.unique(),
       appointment
     );
+
+    // Trigger real-time notification for new appointment
+    await triggerNotification('appointment', {
+      id: newAppointment.$id,
+      patient: appointment.patient,
+      schedule: appointment.schedule,
+      primaryPhysician: appointment.primaryPhysician,
+      reason: appointment.reason,
+      status: appointment.status,
+      createdAt: newAppointment.$createdAt,
+    });
 
     // revalidatePath("/admin");
     return parseStringify(newAppointment);

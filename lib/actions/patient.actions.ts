@@ -5,6 +5,25 @@ import { BUCKET_ID, DATABASE_ID, databases, PATIENT_COLLECTION_ID, EMERGENCY_COL
 import { parseStringify } from "../utils"
 import {InputFile} from "node-appwrite/file";
 
+// Helper function to trigger real-time notifications
+const triggerNotification = async (type: 'emergency' | 'appointment', data: any) => {
+  try {
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? process.env.NEXT_PUBLIC_APP_URL 
+      : 'http://localhost:3000';
+    
+    await fetch(`${baseUrl}/api/notifications/trigger`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ type, data }),
+    });
+  } catch (error) {
+    console.error('Failed to trigger notification:', error);
+  }
+};
+
 export const createUser=async(user: CreateUserParams)=>{
     try{
         const newUser=await users.create(
@@ -108,6 +127,19 @@ export const createEmergency=async(emergencyAppointment: EmergencyAppointmentPar
             ID.unique(),
             emergencyAppointment
         )
+
+        // Trigger real-time notification for new emergency
+        await triggerNotification('emergency', {
+          id: newEmergency.$id,
+          name: emergencyAppointment.name,
+          phone: emergencyAppointment.phone,
+          emergencyDate: emergencyAppointment.emergencyDate,
+          reason: emergencyAppointment.reason,
+          primaryPhysician: emergencyAppointment.primaryPhysician,
+          markAsDone: emergencyAppointment.markAsDone,
+          createdAt: newEmergency.$createdAt,
+        });
+
         return parseStringify(newEmergency);
     }catch(err){
         console.error("An error occurred while creating a new emergency appointment:", err);

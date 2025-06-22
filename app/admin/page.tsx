@@ -1,8 +1,11 @@
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
 import StatCard from "@/components/ui/StatCard";
+import RealTimeNotificationBell from "@/components/ui/RealTimeNotificationBell";
+import RealTimeEmergencyAlert from "@/components/ui/RealTimeEmergencyAlert";
+import TestNotificationButtons from "@/components/ui/TestNotificationButtons";
+import SocketDebugger from "@/components/ui/SocketDebugger";
 import { getBellNotification, getRecentAppointmentList } from "@/lib/actions/appointment.actions";
-import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -32,18 +35,11 @@ const Admin = async () => {
             Regular Dashboard 
           </div>
           
-          <Link 
-            href="/admin/emergencyDash" 
-            className="relative p-2 rounded-full hover:bg-gray-800/50 transition-all group"
-            aria-label="Emergency notifications"
-          >
-            <Bell className="w-6 h-6 text-gray-300 group-hover:text-white" />
-            {emergencyCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white animate-bounce">
-                {emergencyCount > 9 ? '9+' : emergencyCount}
-              </span>
-            )}
-          </Link>
+          <RealTimeNotificationBell
+            type="emergency"
+            initialCount={emergencyCount}
+            href="/admin/emergencyDash"
+          />
         </div>
       </header>
 
@@ -59,26 +55,10 @@ const Admin = async () => {
               </p>
             </div>
 
-            <Link 
+            <RealTimeEmergencyAlert
+              initialCount={emergencyCount}
               href="/admin/emergencyDash"
-              className={`flex items-center gap-3 p-3 rounded-lg transition-all ${emergencyCount > 0 
-                ? "bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 animate-pulse-once" 
-                : "bg-gray-800/50 hover:bg-gray-700/50 text-gray-300"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Bell className="w-5 h-5" />
-                <span className="font-semibold text-lg">
-                  {emergencyCount > 0 
-                    ? `${emergencyCount} Emergency Alert${emergencyCount > 1 ? 's' : ''}!` 
-                    : "No emergency alert"}
-                </span>
-              </div>
-              {emergencyCount > 0 && (
-                <span className="ml-2 px-2 py-1 rounded bg-red-600/90 text-white text-sm">
-                  View Now
-                </span>
-              )}
-            </Link>
+            />
           </div>
         </section>
 
@@ -119,6 +99,12 @@ const Admin = async () => {
           />
         </section>
       </main>
+
+      {/* Test Notification Buttons - Remove in production */}
+      {/* <TestNotificationButtons /> */}
+      
+      {/* Socket Debugger - Remove in production */}
+      {/* <SocketDebugger />    debug the socket connection */}
     </div>
   );
 };
