@@ -1,23 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { Doctors } from "@/constants";
-import { getAppointment, getBellNotification } from "@/lib/actions/appointment.actions";
-import { formatDateTime } from "@/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { Button } from '@/components/ui/button';
+import { Doctors } from '@/constants';
+import { getEmergencyAppointment } from '@/lib/actions/appointment.actions';
+import { formatDateTime } from '@/lib/utils';
+import { LucideThermometerSnowflake } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react'
 
-const Success = async ({
-  params: { userId },
+const EmergencySuccess = async({
   searchParams,
 }: SearchParamProps) => {
-  const appointmentId = (searchParams?.appointmentId as string) || "";
-  const appointment = await getAppointment(appointmentId);
-  
+    const emergencyId=(searchParams?.emergencyId as string) || "";
+    const appointment=await getEmergencyAppointment(emergencyId);
 
-  const doctor = Doctors.find(
-    (doc) => doc.name === appointment.primaryPhysician
-  );
-
+    const doctor=Doctors.find(
+        (doc)=>doc.name===appointment.primaryPhysician
+    );
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4 py-10">
@@ -43,20 +41,20 @@ className=""
 />
 </div>
         {/* Success Message - Simplified like screenshot */}
-        <section className="mb-8 flex flex-col items-center">
+        <section className="mb-3 flex flex-col items-center">
           <h1 className="mb-4 text-3xl font-medium text-white">
-            Your <span className="text-blue-500">appointment</span> request has been
-            successfully submitted!
+            <span className="text-red-500">Urgent</span> slot has been
+            successfully booked!
           </h1>
-          <p className="text-gray-400 text-sm">
-            We will be in touch shortly to confirm.
+          <p className="text-red-400 text-sm">
+            Please be on time
           </p>
         </section>
 
         {/* Appointment Details - Minimalist like screenshot */}
         <section className="mb-8 w-full max-w-xs text-center">
-          <h3 className="mb-4 text-sm font-medium text-gray-400">
-            Requested appointment details
+          <h3 className="mb-4 text-sm font-medium text-gray-400 capitalize">
+            Your appointment details
           </h3>
           <div className="w-full max-w-md rounded border border-gray-700/55 bg-blue-700/10 p-6">
   
@@ -90,7 +88,7 @@ className=""
       </div>
       <div>
         <p className="font-medium text-white">
-          {formatDateTime(appointment.schedule).dateTime}
+          {formatDateTime(appointment.emergencyDate).dateTime}
         </p>
       </div>
     </div>
@@ -120,11 +118,11 @@ className=""
         {/* New Appointment Button - Centered like screenshot */}
         <Button
           variant="outline"
-          className="mt-4 rounded-md border-blue-800/55 bg-blue-800 text-white hover:bg-blue-700 hover:text-white"
+          className="mt-4 rounded border-blue-800/55 bg-blue-800 text-white hover:bg-blue-700 hover:text-white"
           asChild
         >
-          <Link href={`/patients/${userId}/new-appointment`}>
-            Schedule another
+          <Link href="/">
+            Back to home
           </Link>
         </Button>
 
@@ -132,7 +130,7 @@ className=""
         <p className="mt-6 text-sm text-gray-500">© 2024 MediSlot</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Success;
+export default EmergencySuccess

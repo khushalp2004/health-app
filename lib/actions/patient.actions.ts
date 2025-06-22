@@ -1,7 +1,7 @@
 "use server"
 
 import { ID, Query } from "node-appwrite"
-import { BUCKET_ID, DATABASE_ID, databases, ENDPOINT, PATIENT_COLLECTION_ID, PROJECT_ID, storage, users } from "../appwrite.config"
+import { BUCKET_ID, DATABASE_ID, databases, PATIENT_COLLECTION_ID, EMERGENCY_COLLECTION_ID, ENDPOINT, PROJECT_ID, storage, users } from "../appwrite.config"
 import { parseStringify } from "../utils"
 import {InputFile} from "node-appwrite/file";
 
@@ -98,3 +98,18 @@ export const getPatient = async (userId: string) => {
     );
   }
 };
+
+export const createEmergency=async(emergencyAppointment: EmergencyAppointmentParams
+)=>{
+    try{
+        const newEmergency=await databases.createDocument(
+            DATABASE_ID!,
+            EMERGENCY_COLLECTION_ID!,
+            ID.unique(),
+            emergencyAppointment
+        )
+        return parseStringify(newEmergency);
+    }catch(err){
+        console.error("An error occurred while creating a new emergency appointment:", err);
+    }
+}

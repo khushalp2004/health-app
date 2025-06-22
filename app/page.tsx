@@ -1,4 +1,5 @@
 import PatientForms from "@/components/forms/PatientForm";
+import EmergencyModal from "@/components/ui/EmergencyModal";
 import { PasskeyModal } from "@/components/ui/PasskeyModal";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,10 +7,12 @@ import Link from "next/link";
 export default async function Home(props: SearchParamProps) {
   const { searchParams } = props;
   const isAdmin = (await searchParams)?.admin === "true";
+  const isEmergency=(await searchParams)?.emergency==="true";
   return (
     <div className="flex h-screen bg-gray-950 text-gray-100">
       {/* Left Panel - Scrollable content */}
       {isAdmin && <PasskeyModal />}
+      {isEmergency && <EmergencyModal/>}
       <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-600/50 scrollbar-track-gray-900">
         <div className="min-h-screen flex flex-col items-center">
           <div className="w-full max-w-lg px-6 py-12 md:py-20">
@@ -42,6 +45,8 @@ export default async function Home(props: SearchParamProps) {
                 >
                   Admin
                 </Link>
+
+                <Link href="/?emergency=true" className="font-medium text-red-700 hover:text-red-600 transition-colors">Emergency</Link>
               </div>
               <p className="mt-4 text-xs text-gray-600">
                 Elevating healthcare through technology

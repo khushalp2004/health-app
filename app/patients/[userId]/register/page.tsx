@@ -44,6 +44,8 @@ const Register = async ({params:{userId}}: SearchParamProps) => {
                                 >
                                     Admin
                                 </Link>
+
+                                <Link href="/?emergency=true" className="font-medium text-red-700 hover:text-red-600 transition-colors">Emergency</Link>
                             </div>
                             <p className="mt-4 text-xs text-gray-600">
                                 Elevating healthcare through technology

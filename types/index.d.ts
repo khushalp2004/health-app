@@ -48,10 +48,25 @@ declare type CreateAppointmentParams = {
   note: string | undefined;
 };
 
+declare type EmergencyAppointmentParams={
+  name: string,
+  phone: string,
+  emergencyDate: Date,
+  reason: string,
+  markAsDone: string | "0",
+  primaryPhysician: string,
+  cancellationReason: string | undefined,
+}
+
 declare type UpdateAppointmentParams = {
   appointmentId: string;
   userId: string;
   timeZone: string;
   appointment: Appointment;
   type: string;
+};
+
+declare type UpdateEmergencyAppointmentParams = {
+  emergencyId: string;
+  markAsDone: boolean | "false";
 };

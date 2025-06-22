@@ -1,18 +1,19 @@
-import { columns } from "@/components/table/columns";
+// "use client";
+
+import { columns } from "@/components/emergencyTable/columns";
 import { DataTable } from "@/components/table/DataTable";
-import StatCard from "@/components/ui/StatCard";
-import { getBellNotification, getRecentAppointmentList } from "@/lib/actions/appointment.actions";
+import { getEmergencyRecentList, getNormalBellNotification } from "@/lib/actions/appointment.actions";
 import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const Admin = async () => {
-  const appointments = await getRecentAppointmentList();
-  const { count: emergencyCount } = await getBellNotification();
+const EmergencyDash = async () => {
+  const appointments = await getEmergencyRecentList();
+  const { count: normalCount } = await getNormalBellNotification();
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 p-4 md:p-6">
-      {/* Header Section */}
+      {/* Header Section - Matching the admin page style */}
       <header className="sticky top-3 z-20 flex items-center justify-between rounded-lg bg-gray-900/80 backdrop-blur-sm p-4 shadow-md border border-gray-800">
         <Link href="/" className="flex items-center gap-3 group">
           <Image
@@ -29,18 +30,18 @@ const Admin = async () => {
 
         <div className="flex items-center gap-6">
           <div className="hidden md:block text-lg font-medium text-gray-300">
-            Regular Dashboard 
+            Emergency Dashboard
           </div>
           
           <Link 
-            href="/admin/emergencyDash" 
+            href="/admin" 
             className="relative p-2 rounded-full hover:bg-gray-800/50 transition-all group"
-            aria-label="Emergency notifications"
+            aria-label="Regular appointments notifications"
           >
             <Bell className="w-6 h-6 text-gray-300 group-hover:text-white" />
-            {emergencyCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white animate-bounce">
-                {emergencyCount > 9 ? '9+' : emergencyCount}
+            {normalCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white animate-pulse">
+                {normalCount > 9 ? '9+' : normalCount}
               </span>
             )}
           </Link>
@@ -53,28 +54,28 @@ const Admin = async () => {
         <section className="space-y-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white">Welcome Back 👋</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white"><span className="text-red-400">Emergency</span> Dashboard</h1>
               <p className="text-gray-400 mt-1">
-                Manage today's appointments and emergencies
+                Manage urgent appointments and critical cases
               </p>
             </div>
 
             <Link 
-              href="/admin/emergencyDash"
-              className={`flex items-center gap-3 p-3 rounded-lg transition-all ${emergencyCount > 0 
+              href="/admin"
+              className={`flex items-center gap-3 p-3 rounded-lg transition-all ${normalCount > 0 
                 ? "bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 animate-pulse-once" 
                 : "bg-gray-800/50 hover:bg-gray-700/50 text-gray-300"}`}
             >
               <div className="flex items-center gap-2">
                 <Bell className="w-5 h-5" />
                 <span className="font-semibold text-lg">
-                  {emergencyCount > 0 
-                    ? `${emergencyCount} Emergency Alert${emergencyCount > 1 ? 's' : ''}!` 
-                    : "No emergency alert"}
+                  {normalCount > 0 
+                    ? `${normalCount} Regular Notification${normalCount > 1 ? 's' : ''}` 
+                    : "No regular notifications"}
                 </span>
               </div>
-              {emergencyCount > 0 && (
-                <span className="ml-2 px-2 py-1 rounded bg-red-600/90 text-white text-sm">
+              {normalCount > 0 && (
+                <span className="ml-2 px-2 py-1 rounded bg-blue-600/90 text-white text-sm">
                   View Now
                 </span>
               )}
@@ -82,40 +83,14 @@ const Admin = async () => {
           </div>
         </section>
 
-        {/* Stats Overview */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <StatCard
-            type="appointments"
-            count={appointments.scheduledCount}
-            label="Scheduled"
-            icon="/appointments.svg"
-            // trend="up"
-          />
-          <StatCard
-            type="pending"
-            count={appointments.pendingCount}
-            label="Pending Approval"
-            icon="/pending.svg"
-            // trend="neutral"
-          />
-          <StatCard
-            type="cancelled"
-            count={appointments.cancelledCount}
-            label="Cancelled"
-            icon="/cancelled.svg"
-            // trend="down"
-          />
-        </section>
-
-        {/* Recent Appointments Table */}
+        {/* Emergency Appointments Table */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">Recent Appointments</h2>
+            <h2 className="text-xl font-semibold text-white">Emergency Appointments</h2>
           </div>
           <DataTable 
             columns={columns} 
-            data={appointments.documents} 
-            // className="border border-gray-800 rounded-lg"
+            data={appointments.documents}
           />
         </section>
       </main>
@@ -123,4 +98,4 @@ const Admin = async () => {
   );
 };
 
-export default Admin;
+export default EmergencyDash;

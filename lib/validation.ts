@@ -10,6 +10,24 @@ export const UserFormValidation = z.object({
     // In your validation schema
 })
 
+export const EmergencyFormValidation=z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be at most 50 characters"),
+  phone: z
+    .string()
+    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    primaryPhysician: z.string().min(2, "Select at least one doctor"),
+  emergencyDate: z.coerce.date(),
+  reason: z
+    .string()
+    .min(2, "Reason must be at least 2 characters")
+    .max(500, "Reason must be at most 500 characters"),
+  cancellationReason: z.string().optional(),
+  markAsDone: z.string(),
+})
+
 export const PatientFormValidation = z.object({
   name: z
     .string()
@@ -86,6 +104,18 @@ export const CreateAppointmentSchema = z.object({
   cancellationReason: z.string().optional(),
 });
 
+export const CreateEmergencySchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  phone: z.string().min(10, "Phone number must be at least 10 characters"),
+  primaryPhysician: z.string().min(2, "Select at least one doctor"),
+  emergencyDate: z.coerce.date(),
+  reason: z
+    .string()
+    .min(2, "Reason must be at least 2 characters")
+    .max(500, "Reason must be at most 500 characters"),
+  cancellationReason: z.string().optional(),
+});
+
 export const ScheduleAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
   schedule: z.coerce.date(),
@@ -109,6 +139,17 @@ export function getAppointmentSchema(type: string) {
   switch (type) {
     case "create":
       return CreateAppointmentSchema;
+    case "cancel":
+      return CancelAppointmentSchema;
+    default:
+      return ScheduleAppointmentSchema;
+  }
+}
+
+export function getEmergencySchema(type: string){
+  switch(type){
+    case "create":
+      return CreateEmergencySchema;
     case "cancel":
       return CancelAppointmentSchema;
     default:

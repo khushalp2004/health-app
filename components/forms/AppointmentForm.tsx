@@ -14,8 +14,6 @@ import { SelectItem } from "../ui/select";
 import Image from "next/image";
 import { createAppointment, updateAppointment } from "@/lib/actions/appointment.actions";
 import { Appointment } from "@/types/appwrite.types";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
 
 export enum FormFieldType {
   INPUT = "input",

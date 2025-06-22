@@ -4,6 +4,7 @@ import "./globals.css";
 
 import {cn} from "@/lib/utils";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { Toaster } from "sonner";
 
 const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
         className={cn('min-h-screen bg-black text-white font-sans antialiased', fontSans.variable)}
       >
             {children}
+            <Toaster richColors position="top-right" />
       </body>
     </html>
   );
